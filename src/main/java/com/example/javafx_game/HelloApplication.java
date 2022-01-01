@@ -22,6 +22,7 @@ public class HelloApplication extends Application {
     int mouse;
     int fallingTime = 7;
     Rectangle block;
+    Text gameOver;
 
     public static void main(String[] args) {
         launch();
@@ -29,6 +30,12 @@ public class HelloApplication extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        
+        gameOver = new Text();
+        gameOver.setLayoutX(240);
+        gameOver.setLayoutY(250);
+        gameOver.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
+
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(300), event -> {
             CircleShape circleShape = new CircleShape();
             fallingCircle.add(circleShape.circle());
@@ -53,8 +60,9 @@ public class HelloApplication extends Application {
                     }
 
                     else if((fallingCircle.get(i)).getLayoutY() >= 590) {
-                        root.getChildren().remove(fallingCircle.get(i));
-                        fallingCircle.remove(i);
+                        timeline.stop();
+                        animationTimer.stop();
+                        gameOver.setText("Game Over!");
                     }
                 }
             }
@@ -63,10 +71,11 @@ public class HelloApplication extends Application {
         animationTimer.start();
         RectangleShape rectangleShape = new RectangleShape();
         block = rectangleShape.rectangle();
-        root.getChildren().addAll(block);
+        root.getChildren().addAll(block, gameOver);
         Scene scene = new Scene(root, 600, 600, Color.BLUEVIOLET);
         scene.setOnMouseMoved(e -> mouse = (int) e.getX());
         primaryStage.setScene(scene);
+        primaryStage.setTitle("Game");
         primaryStage.show();
     }
 }
